@@ -25,7 +25,7 @@ class Rezervacija extends Model
     }
 
     // Metoda za definisanje veze sa automobilom
-    public function automobil()
+    public function auto()
     {
         return $this->belongsTo(Auto::class, 'automobil_id');
     }
