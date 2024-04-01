@@ -21,7 +21,24 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'jmbg',
+        'br_lk',
+        'adresa',
+        'kontakt',
+        'uloga'
+
     ];
+     // Metoda za definiranje veze s rezervacijama
+    public function rezervacije()
+    {
+        return $this->hasMany(Rezervacija::class);
+    }
+
+     // Metoda za definiranje veze s dokumentima
+     public function dokumenta()
+     {
+         return $this->hasMany(Dokument::class);
+     }
 
     /**
      * The attributes that should be hidden for serialization.
