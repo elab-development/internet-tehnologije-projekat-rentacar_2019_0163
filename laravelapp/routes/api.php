@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::resource('auto', 'AutoController');
 Route::resource('rezervacije', 'RezervacijaController');
+Route::resource('dokumenti', 'DokumentController');
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
