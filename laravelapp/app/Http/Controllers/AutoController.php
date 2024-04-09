@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AutoResource;
 use Illuminate\Http\Request;
 use App\Models\Auto;
 use Illuminate\Support\Facades\Validator;
@@ -17,7 +18,7 @@ class AutoController extends Controller
     public function index()
     {
         $autos = Auto::all();
-        return response()->json(['data' => $autos]);
+        return response()->json(['data' => AutoResource::collection($autos)]);
     }
 
     /**
@@ -31,7 +32,7 @@ class AutoController extends Controller
         $validator = Validator::make($request->all(), [
             'marka' => 'required',
             'model' => 'required',
-            'godina_proizvodnje' => 'required|date',
+            'godina_proizvodnje' => 'required',
             'boja' => 'required',
             'broj_vrata' => 'required|integer',
             'prenos' => 'required|in:automatski,manuelni',
@@ -47,7 +48,7 @@ class AutoController extends Controller
 
         $auto = Auto::create($request->all());
 
-        return response()->json(['data' => $auto], 201);
+        return response()->json(['data' => new AutoResource($auto)], 201);
     }
 
     /**
@@ -74,7 +75,7 @@ class AutoController extends Controller
         $validator = Validator::make($request->all(), [
             'marka' => 'required',
             'model' => 'required',
-            'godina_proizvodnje' => 'required|date',
+            'godina_proizvodnje' => 'required',
             'boja' => 'required',
             'broj_vrata' => 'required|integer',
             'prenos' => 'required|in:automatski,manuelni',

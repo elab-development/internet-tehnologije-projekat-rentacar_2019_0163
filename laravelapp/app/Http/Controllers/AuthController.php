@@ -91,57 +91,47 @@ class AuthController extends Controller
             'token' => $token,
         ], 201);
     }
-
-   
- 
-    /**
-     * Send reset password link to the given user.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function forgotPassword(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-        ]);
-
+        $request->validate(['email' => 'required|email']);
+    
         $status = Password::sendResetLink(
             $request->only('email')
         );
-
-        return $status === Password::RESET_LINK_SENT
-                    ? response()->json(['message' => __($status)])
-                    : response()->json(['message' => __($status)], 400);
-    }
-
-    /**
-     * Reset the user's forgotten password.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function resetPassword(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string|min:6|confirmed',
-            'token' => 'required|string',
+    
+        if ($status === Password::RESET_LINK_SENT) {
+            return response()->json(['status' => __($status)]);
+        }
+    
+        throw ValidationException::withMessages([
+            'email' => [__($status)],
         ]);
-
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) {
-                $user->forceFill([
-                    'password' => Hash::make($password)
-                ])->save();
-            }
-        );
-
-        return $status === Password::PASSWORD_RESET
-                    ? response()->json(['message' => __($status)])
-                    : response()->json(['message' => __($status)], 400);
     }
+    public function resetPassword(Request $request)
+{
+    $request->validate([
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => 'required|string|min:6|confirmed',
+    ]);
+
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function ($user, $password) {
+            $user->forceFill([
+                'password' => Hash::make($password)
+            ])->setRememberToken(Str::random(60));
+
+            $user->save();
+        }
+    );
+
+    if ($status === Password::PASSWORD_RESET) {
+        return response()->json(['status' => __($status)]);
+    }
+
+    return response()->json(['email' => [__($status)]], 500);
+}
 }
 
  

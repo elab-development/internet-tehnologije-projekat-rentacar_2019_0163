@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RezervacijaResource;
 use Illuminate\Http\Request;
 use App\Models\Rezervacija;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -16,20 +18,20 @@ class RezervacijaController extends Controller
      */
     public function index()
     {
-        $rezervacije = Rezervacija::all();
-        return response()->json(['data' => $rezervacije]);
+        // Dobij trenutno ulogovanog korisnika
+        $user = Auth::user();
+        
+        // Dobij rezervacije samo za trenutno ulogovanog korisnika
+        $rezervacije = Rezervacija::where('user_id', $user->id)->get();
+        
+        return response()->json(['data' => RezervacijaResource::collection( $rezervacije)]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function store(Request $request)
     {
+        $user_id = Auth::id(); // Dobij ID trenutno ulogovanog korisnika
+
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:users,id',
             'automobil_id' => 'required|exists:autos,id',
             'datum_od' => 'required|date',
             'datum_do' => 'required|date|after:datum_od',
@@ -42,34 +44,16 @@ class RezervacijaController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $rezervacija = Rezervacija::create($request->all());
+        $rezervacija = Rezervacija::create(array_merge($request->all(), ['user_id' => $user_id]));
 
-        return response()->json(['data' => $rezervacija], 201);
+        return response()->json(['data' => new RezervacijaResource( $rezervacija)], 201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function show($id)
-    {
-        $rezervacija = Rezervacija::findOrFail($id);
-        return response()->json(['data' => $rezervacija]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function update(Request $request, $id)
     {
+        $user_id = Auth::id(); // Dobij ID trenutno ulogovanog korisnika
+
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:users,id',
             'automobil_id' => 'required|exists:autos,id',
             'datum_od' => 'required|date',
             'datum_do' => 'required|date|after:datum_od',
@@ -83,20 +67,28 @@ class RezervacijaController extends Controller
         }
 
         $rezervacija = Rezervacija::findOrFail($id);
+        
+        // Proveri da li je korisnik vlasnik rezervacije pre nego što je ažurirate
+        if ($rezervacija->user_id !== $user_id) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         $rezervacija->update($request->all());
 
-        return response()->json(['data' => $rezervacija]);
+        return response()->json(['data' => new RezervacijaResource( $rezervacija)]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function destroy($id)
     {
+        $user_id = Auth::id(); // Dobij ID trenutno ulogovanog korisnika
+
         $rezervacija = Rezervacija::findOrFail($id);
+        
+        // Proveri da li je korisnik vlasnik rezervacije pre nego što je obrišete
+        if ($rezervacija->user_id !== $user_id) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         $rezervacija->delete();
 
         return response()->json(['message' => 'Reservation deleted successfully']);
