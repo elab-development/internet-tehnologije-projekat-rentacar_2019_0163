@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './Auth.css';  
 
-const Login = () => {
+const Login = ({setToken}) => {
   const [formData, setFormData] = useState({
     email: 'vlatkovicsebastijan@gmail.com',
     password: 'password'
@@ -21,6 +21,8 @@ const Login = () => {
       console.log(response.data);  
       sessionStorage.setItem("token",response.data.token)
       sessionStorage.setItem("user", JSON.stringify(response.data.user));
+
+      setToken(response.data.token)
        
     } catch (error) {
       console.error('Login failed:', error);  
