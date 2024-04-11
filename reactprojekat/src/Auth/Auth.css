@@ -1,0 +1,90 @@
+.screen-1 {
+    background: hsl(213deg 85% 97%);
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+    border-radius: 30px;
+    box-shadow: 0 0 2em hsl(231deg 62% 94%);
+  }
+  
+  body {
+    user-select: none;
+    overflow-y: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: hsl(218deg 50% 91%);
+    height: 100vh;
+  }
+  
+  .screen-1{ gap: 2em;}
+  .screen-1 .logo {
+    margin-top: -3em;
+  }
+  
+  .screen-1 .email,
+  .screen-1 .password {
+    background: hsl(0deg 0% 100%);
+    box-shadow: 0 0 2em hsl(231deg 62% 94%);
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    border-radius: 20px;
+    color: hsl(0deg 0% 30%);
+    margin-top: -3em;
+    margin: 5%;
+  }
+  
+  .screen-1 input {
+    outline: none;
+    border: none;
+  }
+  
+  .screen-1 input::placeholder {
+    color: hsl(0deg 0% 0%);
+    font-size: 0.9em;
+  }
+  
+  .screen-1 ion-icon {
+    color: hsl(0deg 0% 30%);
+    margin-bottom: -0.2em;
+  }
+  
+  .screen-1 .password .show-hide {
+    margin-right: -5em;
+  }
+  
+  .screen-1 .login {
+    padding: 1em;
+    background: hsl(233deg 36% 38%);
+    color: hsl(0 0 100);
+    border: none;
+    border-radius: 30px;
+    font-weight: 600;
+  }
+  
+  .screen-1 .footer {
+    display: flex;
+    font-size: 0.7em;
+    color: hsl(0deg 0% 37%);
+    gap: 14em;
+    padding-bottom: 10em;
+  }
+  
+  button {
+    cursor: pointer;
+  }
+  
+  .screen-1 svg {
+    transform: matrix(3.31, 0, 0, 3.31, 320.4, 240.4);
+  }
+  
+  .screen-1 svg circle:first-child {
+    fill: rgb(61, 71, 133);
+  }
+  
+  .screen-1 svg circle:last-child {
+    fill: rgb(255, 255, 255);
+  }
+  
