@@ -1,10 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './AutoCard.css';
 
 const AutoCard = ({ auto }) => {
+  const [carImages, setCarImages] = useState([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const fetchCarImages = async () => {
+      try {
+        const response = await axios.get(`https://api.unsplash.com/search/photos?query=${auto.marka}&client_id=AYoD1RB6ATmNpK69MpZK7lqW5fFyqTUtrHFhEZW7o1k`);
+        const images = response.data.results.map(result => result.urls.regular);
+        setCarImages(images);
+      } catch (error) {
+        console.error('Error fetching car images:', error);
+      }
+    };
+
+    fetchCarImages();
+  }, [auto.marka]);
+
+  const nextImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % carImages.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + carImages.length) % carImages.length);
+  };
+
   return (
     <div className="auto-card">
-      <img className="auto-image" src={`https://via.placeholder.com/150?text=${auto.marka}+${auto.model}`} alt={`${auto.marka} ${auto.model}`} />
+      <div className="auto-images">
+        {carImages.length > 0 && (
+          <>
+            <img className="auto-image" src={carImages[currentImageIndex]} alt={`${auto.marka} ${auto.model}`} />
+            <div className="navigation-buttons">
+              <button onClick={prevImage}>&#8249;</button>
+              <button onClick={nextImage}>&#8250;</button>
+            </div>
+          </>
+        )}
+      </div>
       <div className="auto-details">
         <h3>{auto.marka} - {auto.model}</h3>
         <p><strong>Boja:</strong> {auto.boja}</p>
