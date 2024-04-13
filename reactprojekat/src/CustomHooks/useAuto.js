@@ -21,7 +21,7 @@ const useAuto = () => {
           }
         });
         // Postavljanje dobijenih podataka u state
-        setAutos(response.data);
+        setAutos(response.data.data);
       } catch (error) {
         console.error('Error fetching autos:', error);
         // Možete dodati i neki vid obrade greške ovde

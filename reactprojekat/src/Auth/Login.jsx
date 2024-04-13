@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Auth.css';  
+import { useNavigate } from 'react-router-dom';
 
 const Login = ({setToken}) => {
+  let navigate=useNavigate();
   const [formData, setFormData] = useState({
     email: 'vlatkovicsebastijan@gmail.com',
     password: 'password'
@@ -23,7 +25,7 @@ const Login = ({setToken}) => {
       sessionStorage.setItem("user", JSON.stringify(response.data.user));
 
       setToken(response.data.token)
-       
+      navigate('/ponuda')
     } catch (error) {
       console.error('Login failed:', error);  
     }
