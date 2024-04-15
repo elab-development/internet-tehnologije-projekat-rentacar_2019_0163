@@ -1,10 +1,12 @@
+// LoginForm.jsx
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Auth.css';  
 import { useNavigate } from 'react-router-dom';
 
-const Login = ({setToken}) => {
-  let navigate=useNavigate();
+const LoginForm = ({ setToken }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: 'vlatkovicsebastijan@gmail.com',
     password: 'password'
@@ -21,7 +23,7 @@ const Login = ({setToken}) => {
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/login', formData);
       console.log(response.data);  
-      sessionStorage.setItem("token",response.data.token)
+      sessionStorage.setItem("token", response.data.token)
       sessionStorage.setItem("user", JSON.stringify(response.data.user));
 
       setToken(response.data.token)
@@ -35,8 +37,7 @@ const Login = ({setToken}) => {
     <form onSubmit={handleSubmit} className="screen-1"> 
       <div className="email">
         <label htmlFor="email">Email Address</label>
-        <div className="sec-2">
-          <ion-icon name="mail-outline"></ion-icon>
+        <div className="sec-2"> 
           <input
             type="email"
             name="email"
@@ -50,7 +51,6 @@ const Login = ({setToken}) => {
       <div className="password">
         <label htmlFor="password">Password</label>
         <div className="sec-2">
-          <ion-icon name="lock-closed-outline"></ion-icon>
           <input
             type="password"
             name="password"
@@ -59,7 +59,6 @@ const Login = ({setToken}) => {
             placeholder="············"
             style={{width:"100%"}}
           />
-          <ion-icon className="show-hide" name="eye-outline"></ion-icon>
         </div>
       </div>
       <button type="submit" className="login">
@@ -73,4 +72,4 @@ const Login = ({setToken}) => {
   );
 };
 
-export default Login;
+export default LoginForm;
