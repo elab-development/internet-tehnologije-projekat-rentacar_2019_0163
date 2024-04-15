@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './Navbar/Navbar';
 import { useState } from 'react';
 import AutoList from './Auto/AutoList';
+import Footer from './Navbar/Footer';
 function App() {
   const [token,setToken] = useState(null);
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/ponuda" element={<AutoList />} />
 
         </Routes>
+        <Footer></Footer>
       </div>
     </Router>
   );
