@@ -71,32 +71,9 @@ button {
   margin: 0 auto;
   padding: 0 1rem;
 }
+ 
 
-form {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: min(100%, 400px);
-  border-bottom: 1px solid var(--dark);
-}
-
-input {
-  padding: 0.75rem 0;
-  border: none;
-  background: none;
-  font-weight: 500;
-  transition: border 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
-  border-radius: 0;
-  width: 100%;
-  font-size: 1.05rem;
-  font-weight: bolder;
-}
-input:focus {
-  outline: none;
-}
-input::placeholder {
-  color: var(--dark);
-}
+ 
 @media (min-width: 675px) {
   .layout {
     display: flex;

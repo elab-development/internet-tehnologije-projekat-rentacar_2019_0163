@@ -1,9 +1,8 @@
-// LoginForm.jsx
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Auth.css';  
 import { useNavigate } from 'react-router-dom';
+import InputField from './InputField';  
 
 const LoginForm = ({ setToken }) => {
   const navigate = useNavigate();
@@ -35,36 +34,28 @@ const LoginForm = ({ setToken }) => {
 
   return (
     <form onSubmit={handleSubmit} className="screen-1"> 
-      <div className="email">
-        <label htmlFor="email">Email Address</label>
-        <div className="sec-2"> 
-          <input
-            type="email"
-            name="email"
-            value={email}
-            onChange={handleChange}
-            placeholder="Username@gmail.com"
-            style={{width:"100%"}}
-          />
-        </div>
-      </div>
-      <div className="password">
-        <label htmlFor="password">Password</label>
-        <div className="sec-2">
-          <input
-            type="password"
-            name="password"
-            value={password}
-            onChange={handleChange}
-            placeholder="············"
-            style={{width:"100%"}}
-          />
-        </div>
-      </div>
+      {/* Koristi InputField komponentu za unos email adrese */}
+      <InputField
+        label="Email Address"
+        name="email"
+        type="email"
+        value={email}
+        onChange={handleChange}
+        placeholder="Username@gmail.com"
+      />
+      
+      <InputField
+        label="Password"
+        name="password"
+        type="password"
+        value={password}
+        onChange={handleChange}
+        placeholder="············"
+      />
       <button type="submit" className="login">
         Login
       </button>
-      <div className="footer">
+      <div className="footer-login">
         <span>Sign up</span>
         <span>Forgot Password?</span>
       </div>

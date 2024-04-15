@@ -1,18 +1,24 @@
  
 import React from 'react';
 import './Footer.css';
+import InputField from '../Auth/InputField';
 
 const Footer = () => {
   return (
     <footer className="footer"> 
-        <div className="footer_inner">
+        <div className="footer_inner"> 
           <div className="c-footer">
             <div className="layout">
               <div className="layout_item w-50">
                 <div className="newsletter">
                   <h3 className="newsletter_title">Get updates on fun stuff you probably want to know about in your inbox.</h3>
                   <form action="">
-                    <input type="text" placeholder="Email Address" />
+                  <InputField
+                        label="Email Address"
+                        name="email"
+                        type="email" 
+                        placeholder="username@gmail.com"
+                    />
                     <button>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                         <path fill="none" d="M0 0h24v24H0z" />
