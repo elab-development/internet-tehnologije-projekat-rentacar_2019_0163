@@ -13,6 +13,7 @@ const AutoList = () => {
     broj_vrata: '',
   });
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortAsc, setSortAsc] = useState(true); // Da li sortiramo rastuće ili opadajuće
   const itemsPerPage = 6; // Broj automobila po stranici
 
   const handleFilterChange = (e) => {
@@ -28,15 +29,23 @@ const AutoList = () => {
     (filters.cena_po_danu ? auto.cena_po_danu <= Number(filters.cena_po_danu) : true) &&
     (filters.broj_vrata ? auto.broj_vrata === Number(filters.broj_vrata) : true)
   ));
-
+  // Sortiranje automobila po ceni
+  const sortedAutos = [...filteredAutos].sort((a, b) => {
+    if (sortAsc) {
+      return a.cena_po_danu - b.cena_po_danu;
+    } else {
+      return b.cena_po_danu - a.cena_po_danu;
+    }
+  });
   // Izračunavanje indeksa prvog i poslednjeg automobila na trenutnoj stranici
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentAutos = filteredAutos.slice(indexOfFirstItem, indexOfLastItem);
+  const currentAutos = sortedAutos.slice(indexOfFirstItem, indexOfLastItem);
 
   // Funkcija za promenu trenutne stranice
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+  // Funkcija za promenu smera sortiranja
+  const toggleSort = () => setSortAsc(prev => !prev);
   return (
     <>
       <h2>Automobili u ponudi</h2>
@@ -63,6 +72,10 @@ const AutoList = () => {
             <label htmlFor="broj_vrata">Broj vrata:</label>
             <input type="number" id="broj_vrata" name="broj_vrata" value={filters.broj_vrata} onChange={handleFilterChange} />
           </div>
+               {/* Dodajemo dugme za promenu smera sortiranja */}
+          <button onClick={toggleSort}>
+            {sortAsc ? 'Sortiraj opadajuće' : 'Sortiraj rastuće'}
+          </button>
           <div className="pagination">
           <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}><MdNavigateBefore /></button>
           <span>Trenutna stranica: {currentPage}</span>

@@ -25,7 +25,7 @@ const Navbar = ({ token, setToken }) => {
     <div className="navbar">
       {token === null ? (
         <div className="auth-links">
-          <button onClick={() => navigate('/login')}>Login</button>
+          <button onClick={() => navigate('/')}>Login</button>
           <button onClick={() => navigate('/register')}>Register</button>
         </div>
       ) : (

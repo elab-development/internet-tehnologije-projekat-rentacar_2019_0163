@@ -40,7 +40,7 @@ const Footer = () => {
                       <a href="/register" className="c-link">Register</a>
                     </li>
                     <li className="c-nav-tool_item">
-                      <a href="/login" className="c-link">Login</a>
+                      <a href="/" className="c-link">Login</a>
                     </li>
                   </ul>
                 </nav>

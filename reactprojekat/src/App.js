@@ -15,7 +15,7 @@ function App() {
       <div>
        
         <Routes>
-          <Route path="/login" element={<Login setToken={setToken}/>} />
+          <Route path="/" element={<Login setToken={setToken}/>} />
           <Route path="/register" element={<Register />} />
 
           <Route path="/ponuda" element={<AutoList />} />
