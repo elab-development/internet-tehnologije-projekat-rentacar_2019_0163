@@ -21,7 +21,7 @@ const LoginForm = ({ setToken }) => {
     e.preventDefault();
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/login', formData);
-      console.log(response.data);  
+      console.log(response.data.token);  
       sessionStorage.setItem("token", response.data.token)
       sessionStorage.setItem("user", JSON.stringify(response.data.user));
 
@@ -34,7 +34,7 @@ const LoginForm = ({ setToken }) => {
 
   return (
     <form onSubmit={handleSubmit} className="screen-1"> 
-      {/* Koristi InputField komponentu za unos email adrese */}
+    
       <InputField
         label="Email Address"
         name="email"

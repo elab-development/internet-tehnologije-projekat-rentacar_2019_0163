@@ -7,7 +7,7 @@ import InputField from './InputField';
 const Register = () => {
   const [formData, setFormData] = useState({
     name: 'Pera',
-    email: 'pera@gmail.com',
+    email: 'peeeeeera@gmail.com',
     password: 'password',
     jmbg: '15616456',
     br_lk: '156165',
@@ -34,8 +34,7 @@ const Register = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="screen-1"> 
- 
+    <form onSubmit={handleSubmit} className="screen-1">  
       <InputField
         label="Name"
         name="name"

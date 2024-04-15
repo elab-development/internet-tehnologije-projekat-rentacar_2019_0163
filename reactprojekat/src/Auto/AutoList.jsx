@@ -12,10 +12,10 @@ const AutoList = () => {
     cena_po_danu: '',
     broj_vrata: '',
   });
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sortAsc, setSortAsc] = useState(true); // Da li sortiramo rastuće ili opadajuće
+  const [currentPage, setCurrentPage] = useState(1); 
   const itemsPerPage = 6; // Broj automobila po stranici
 
+  const [sortAsc, setSortAsc] = useState(true); // Da li sortiramo rastuće ili opadajuće
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters(prev => ({ ...prev, [name]: value }));
@@ -44,6 +44,7 @@ const AutoList = () => {
 
   // Funkcija za promenu trenutne stranice
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  
   // Funkcija za promenu smera sortiranja
   const toggleSort = () => setSortAsc(prev => !prev);
   return (
