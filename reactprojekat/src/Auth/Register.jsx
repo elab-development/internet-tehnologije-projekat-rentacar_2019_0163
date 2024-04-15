@@ -42,6 +42,7 @@ const Register = () => {
             value={name}
             onChange={handleChange}
             placeholder="Your Name"
+             style={{width:"100%"}}
           />
         </div>
       </div>
@@ -55,6 +56,7 @@ const Register = () => {
             value={email}
             onChange={handleChange}
             placeholder="Username@gmail.com"
+            style={{width:"100%"}}
           />
         </div>
       </div>
@@ -68,6 +70,7 @@ const Register = () => {
             value={password}
             onChange={handleChange}
             placeholder="············"
+            style={{width:"100%"}}
           />
           <ion-icon className="show-hide" name="eye-outline"></ion-icon>
         </div>
@@ -81,6 +84,7 @@ const Register = () => {
             value={jmbg}
             onChange={handleChange}
             placeholder="Your JMBG"
+            style={{width:"100%"}}
           />
         </div>
       </div>
@@ -93,6 +97,7 @@ const Register = () => {
             value={br_lk}
             onChange={handleChange}
             placeholder="Your Broj LK"
+            style={{width:"100%"}}
           />
         </div>
       </div>
@@ -105,6 +110,7 @@ const Register = () => {
             value={adresa}
             onChange={handleChange}
             placeholder="Your Adresa"
+            style={{width:"100%"}}
           />
         </div>
       </div>
@@ -117,6 +123,7 @@ const Register = () => {
             value={kontakt}
             onChange={handleChange}
             placeholder="Your Kontakt"
+            style={{width:"100%"}}
           />
         </div>
       </div>

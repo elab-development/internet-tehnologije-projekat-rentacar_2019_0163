@@ -43,6 +43,7 @@ const Login = ({setToken}) => {
             value={email}
             onChange={handleChange}
             placeholder="Username@gmail.com"
+            style={{width:"100%"}}
           />
         </div>
       </div>
@@ -56,6 +57,7 @@ const Login = ({setToken}) => {
             value={password}
             onChange={handleChange}
             placeholder="············"
+            style={{width:"100%"}}
           />
           <ion-icon className="show-hide" name="eye-outline"></ion-icon>
         </div>

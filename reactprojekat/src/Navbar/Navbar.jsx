@@ -29,7 +29,9 @@ const Navbar = ({ token, setToken }) => {
           <button onClick={() => navigate('/register')}>Register</button>
         </div>
       ) : (
-        <button onClick={handleLogout}>Logout</button>
+        <div className="auth-links">
+        <button onClick={() => navigate('/ponuda')}>Ponuda</button>
+        <button onClick={handleLogout}>Logout</button></div>
       )}
     </div>
   );
