@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 import useAuto from '../CustomHooks/useAuto';
+import axios from 'axios';
+import { RiDeleteBin6Line, RiPencilLine } from 'react-icons/ri';
 import './Automobili.css';
 
 const Automobili = () => {
-  const [autos] = useAuto();
+  const [autos, setAutos] = useAuto();
   const [searchParams, setSearchParams] = useState({
     marka: '',
     model: '',
     godina_proizvodnje: '',
     boja: '',
-    broj_vrata: '',
-    prenos: '',
     registraciona_oznaka: '',
     istek_registracije: '',
-    maksimalan_broj_putnika: '',
     cena_po_danu: ''
   });
 
@@ -32,6 +31,28 @@ const Automobili = () => {
       ...prevParams,
       [name]: value
     }));
+  };
+
+  // Funkcija za brisanje automobila
+  const handleDelete = async (id) => {
+    try {
+      const token = sessionStorage.getItem('token');
+      await axios.delete(`http://127.0.0.1:8000/api/auto/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      // Nakon uspešnog brisanja, ažuriramo listu automobila
+      const updatedAutos = autos.filter(auto => auto.id !== id);
+      setAutos(updatedAutos);
+    } catch (error) {
+      console.error('Error deleting auto:', error);
+    }
+  };
+
+  // Funkcija za izmenu automobila
+  const handleEdit = (id) => {
+    // Implementacija za izmenu automobila
   };
 
   return (
@@ -54,12 +75,10 @@ const Automobili = () => {
             <th>Model</th>
             <th>Godina proizvodnje</th>
             <th>Boja</th>
-            <th>Broj vrata</th>
-            <th>Prenos</th>
             <th>Registraciona oznaka</th>
             <th>Istek registracije</th>
-            <th>Maksimalan broj putnika</th>
             <th>Cena po danu</th>
+            <th>Akcije</th>
           </tr>
         </thead>
         <tbody>
@@ -69,12 +88,13 @@ const Automobili = () => {
               <td>{auto.model}</td>
               <td>{auto.godina_proizvodnje}</td>
               <td>{auto.boja}</td>
-              <td>{auto.broj_vrata}</td>
-              <td>{auto.prenos}</td>
               <td>{auto.registraciona_oznaka}</td>
               <td>{auto.istek_registracije}</td>
-              <td>{auto.maksimalan_broj_putnika}</td>
               <td>{auto.cena_po_danu}</td>
+              <td>
+                <button onClick={() => handleEdit(auto.id)}><RiPencilLine /></button>
+                <button onClick={() => handleDelete(auto.id)}><RiDeleteBin6Line /></button>
+              </td>
             </tr>
           ))}
         </tbody>
