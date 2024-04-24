@@ -1,23 +1,28 @@
 .search-fields {
     display: flex;
+    flex-wrap: wrap; /* Dodajemo omotač za omogućavanje prelamanja na više redova */
     justify-content: space-between;
     margin-bottom: 20px;
   }
   
-  .search-fields input {
+  .search-fields input,
+  .search-fields select {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    flex-grow: 1;
-    margin-right: 10px;
+    margin-bottom: 10px; /* Dodajemo razmak između polja */
+    width: calc(50% - 5px); /* Postavljamo širinu na pola i oduzimamo 5px zbog margina */
+  }
+  
+  .search-fields select {
+    margin-bottom: 0; /* Uklanjamo dodatni razmak za select elemente */
   }
   
   .auto-table {
     margin-top: 20px;
     margin-left: 5%;
     margin-right: 5%;
-
   }
   
   .auto-table table {

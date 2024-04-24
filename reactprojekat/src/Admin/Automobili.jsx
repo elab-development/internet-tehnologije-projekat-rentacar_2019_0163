@@ -15,23 +15,33 @@ const Automobili = () => {
     istek_registracije: '',
     cena_po_danu: ''
   });
-    // Dodajemo stanje za uređivanje svakog polja posebno
-    const [editParams, setEditParams] = useState({
-        marka: '',
-        model: '',
-        godina_proizvodnje: '',
-        boja: '',
-        registraciona_oznaka: '',
-        istek_registracije: '',
-        cena_po_danu: ''
-    });
-
+  const [editParams, setEditParams] = useState({
+    marka: '',
+    model: '',
+    godina_proizvodnje: '',
+    boja: '',
+    registraciona_oznaka: '',
+    istek_registracije: '',
+    cena_po_danu: ''
+  });
   const [editItemId, setEditItemId] = useState(null); // Čuva ID automobila koji se trenutno uređuje
+  const [newAutoParams, setNewAutoParams] = useState({
+    marka: '',
+    model: '',
+    godina_proizvodnje: '',
+    boja: '',
+    registraciona_oznaka: '',
+    istek_registracije: '',
+    cena_po_danu: '',
+    broj_vrata: '',
+    prenos: 'automatski', // Inicijalno postavljamo automatski prenos
+    maksimalan_broj_putnika: ''
+  });
 
   // Funkcija za filtriranje automobila
   const filteredAutos = autos.filter(auto => {
     return Object.keys(searchParams).every(key => {
-      if (searchParams[key] === '') return true; // Ako je polje za pretragu prazno, vraćamo true i ne filtriramo po tom parametru
+      if (searchParams[key] === '') return true;
       return auto[key].toString().toLowerCase().includes(searchParams[key].toLowerCase());
     });
   });
@@ -46,7 +56,7 @@ const Automobili = () => {
   };
 
   // Funkcija za brisanje automobila
-  const handleDelete = async (id) => {
+  const handleDelete = async id => {
     try {
       const token = sessionStorage.getItem('token');
       await axios.delete(`http://127.0.0.1:8000/api/auto/${id}`, {
@@ -54,7 +64,6 @@ const Automobili = () => {
           Authorization: `Bearer ${token}`
         }
       });
-      // Nakon uspešnog brisanja, ažuriramo listu automobila
       const updatedAutos = autos.filter(auto => auto.id !== id);
       setAutos(updatedAutos);
     } catch (error) {
@@ -62,25 +71,15 @@ const Automobili = () => {
     }
   };
 
-// Funkcija za započinjanje uređivanja automobila
-const handleStartEdit = (id) => {
+  // Funkcija za započinjanje uređivanja automobila
+  const handleStartEdit = id => {
     setEditItemId(id);
-    // Pronalazimo automobil koji se uređuje
     const editingAuto = autos.find(auto => auto.id === id);
-    // Ažuriramo stanje uređivanja svakog polja posebno
-    setEditParams({
-      marka: editingAuto.marka,
-      model: editingAuto.model,
-      godina_proizvodnje: editingAuto.godina_proizvodnje,
-      boja: editingAuto.boja,
-      registraciona_oznaka: editingAuto.registraciona_oznaka,
-      istek_registracije: editingAuto.istek_registracije,
-      cena_po_danu: editingAuto.cena_po_danu
-    });
+    setEditParams(editingAuto);
   };
-  
+
   // Funkcija za završavanje uređivanja automobila
-  const handleFinishEdit = async (id) => {
+  const handleFinishEdit = async id => {
     try {
       const token = sessionStorage.getItem('token');
       await axios.put(`http://127.0.0.1:8000/api/auto/${id}`, editParams, {
@@ -88,7 +87,6 @@ const handleStartEdit = (id) => {
           Authorization: `Bearer ${token}`
         }
       });
-      // Nakon uspešnog ažuriranja, ažuriramo listu automobila
       const updatedAutos = autos.map(auto => {
         if (auto.id === id) {
           return { ...auto, ...editParams };
@@ -96,17 +94,17 @@ const handleStartEdit = (id) => {
         return auto;
       });
       setAutos(updatedAutos);
-      setEditItemId(null); // Resetujemo ID automobila koji se uređuje
+      setEditItemId(null);
     } catch (error) {
       console.error('Error updating auto:', error);
     }
   };
-  
+
   // Funkcija za odustajanje od uređivanja
   const handleCancelEdit = () => {
-    setEditItemId(null); // Resetujemo ID automobila koji se uređuje
+    setEditItemId(null);
   };
-  
+
   // Funkcija za izmenu automobila
   const handleEditChange = e => {
     const { name, value } = e.target;
@@ -116,10 +114,49 @@ const handleStartEdit = (id) => {
     }));
   };
 
+  // Funkcija za unos novog automobila
+  const handleNewAutoChange = e => {
+    const { name, value } = e.target;
+    setNewAutoParams(prevParams => ({
+      ...prevParams,
+      [name]: value
+    }));
+  };
+
+  // Funkcija za dodavanje novog automobila
+  const handleAddNewAuto = async () => {
+    try {
+      const token = sessionStorage.getItem('token');
+      const response = await axios.post('http://127.0.0.1:8000/api/auto', newAutoParams, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      const newAuto = response.data;
+      setAutos([...autos, newAuto]);
+      setNewAutoParams({
+        marka: '',
+        model: '',
+        godina_proizvodnje: '',
+        boja: '',
+        registraciona_oznaka: '',
+        istek_registracije: '',
+        cena_po_danu: '',
+        broj_vrata: '',
+        prenos: 'automatski',
+        maksimalan_broj_putnika: ''
+      });
+      alert("USPESNO DODATO!")
+    } catch (error) {
+      console.error('Error adding new auto:', error);
+      alert(error)
+    }
+  };
+
   return (
-    <div className='auto-table'>
-      <h2>Lista automobila</h2>
-    
+    <div className="auto-table">
+      <h2>Pretraga automobila</h2>
+
       <div className="search-fields">
         <input type="text" name="marka" value={searchParams.marka} onChange={handleSearchChange} placeholder="Marka" />
         <input type="text" name="model" value={searchParams.model} onChange={handleSearchChange} placeholder="Model" />
@@ -129,6 +166,25 @@ const handleStartEdit = (id) => {
         <input type="text" name="istek_registracije" value={searchParams.istek_registracije} onChange={handleSearchChange} placeholder="Istek registracije" />
         <input type="text" name="cena_po_danu" value={searchParams.cena_po_danu} onChange={handleSearchChange} placeholder="Cena po danu" />
       </div>
+
+      <h2>Dodaj novi automobil</h2>
+      <div className="search-fields">
+        <input type="text" name="marka" value={newAutoParams.marka} onChange={handleNewAutoChange} placeholder="Marka" />
+        <input type="text" name="model" value={newAutoParams.model} onChange={handleNewAutoChange} placeholder="Model" />
+        <input type="text" name="godina_proizvodnje" value={newAutoParams.godina_proizvodnje} onChange={handleNewAutoChange} placeholder="Godina proizvodnje" />
+        <input type="text" name="boja" value={newAutoParams.boja} onChange={handleNewAutoChange} placeholder="Boja" />
+        <input type="text" name="registraciona_oznaka" value={newAutoParams.registraciona_oznaka} onChange={handleNewAutoChange} placeholder="Registraciona oznaka" />
+        <input type="text" name="istek_registracije" value={newAutoParams.istek_registracije} onChange={handleNewAutoChange} placeholder="Istek registracije" />
+        <input type="text" name="cena_po_danu" value={newAutoParams.cena_po_danu} onChange={handleNewAutoChange} placeholder="Cena po danu" />
+        <input type="text" name="broj_vrata" value={newAutoParams.broj_vrata} onChange={handleNewAutoChange} placeholder="Broj vrata" />
+        <select name="prenos" value={newAutoParams.prenos} onChange={handleNewAutoChange}>
+          <option value="automatski">Automatski</option>
+          <option value="manuelni">Manuelni</option>
+        </select>
+        <input type="text" name="maksimalan_broj_putnika" value={newAutoParams.maksimalan_broj_putnika} onChange={handleNewAutoChange} placeholder="Maksimalan broj putnika" />
+        <button onClick={handleAddNewAuto}>Dodaj</button>
+      </div>
+
       <table>
         <thead>
           <tr>
@@ -143,7 +199,7 @@ const handleStartEdit = (id) => {
           </tr>
         </thead>
         <tbody>
-          {autos.map(auto => (
+          {filteredAutos.map(auto => (
             <tr key={auto.id}>
               <td>
                 {editItemId === auto.id ? (
@@ -199,7 +255,7 @@ const handleStartEdit = (id) => {
               <td>
                 {editItemId === auto.id ? (
                   <>
-                    <button onClick={() => handleFinishEdit(auto.id, editParams)}>Sačuvaj</button>
+                    <button onClick={() => handleFinishEdit(auto.id)}>Sačuvaj</button>
                     <button onClick={handleCancelEdit}>Otkaži</button>
                   </>
                 ) : (
