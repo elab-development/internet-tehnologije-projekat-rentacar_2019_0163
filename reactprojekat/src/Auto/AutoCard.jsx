@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './AutoCard.css';
-
+import RezervacijaModal from './RezervacijaModal'; 
 const AutoCard = ({ auto }) => {
   const [carImages, setCarImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showModal, setShowModal] = useState(false); // State za prikazivanje modala
 
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
   useEffect(() => {
     const fetchCarImages = async () => {
       try {
@@ -51,7 +59,9 @@ const AutoCard = ({ auto }) => {
         <p><strong>Istek registracije:</strong> {auto.istek_registracije}</p>
         <p><strong>Maksimalan broj putnika:</strong> {auto.maksimalan_broj_putnika}</p>
         <p><strong>Prenos:</strong> {auto.prenos}</p>
+        <button onClick={openModal}>Rezerviši</button>
       </div>
+      {showModal && <RezervacijaModal closeModal={closeModal} auto={auto} />}
     </div>
   );
 };
