@@ -15,6 +15,18 @@ const Automobili = () => {
     istek_registracije: '',
     cena_po_danu: ''
   });
+    // Dodajemo stanje za uređivanje svakog polja posebno
+    const [editParams, setEditParams] = useState({
+        marka: '',
+        model: '',
+        godina_proizvodnje: '',
+        boja: '',
+        registraciona_oznaka: '',
+        istek_registracije: '',
+        cena_po_danu: ''
+    });
+
+  const [editItemId, setEditItemId] = useState(null); // Čuva ID automobila koji se trenutno uređuje
 
   // Funkcija za filtriranje automobila
   const filteredAutos = autos.filter(auto => {
@@ -50,9 +62,58 @@ const Automobili = () => {
     }
   };
 
+// Funkcija za započinjanje uređivanja automobila
+const handleStartEdit = (id) => {
+    setEditItemId(id);
+    // Pronalazimo automobil koji se uređuje
+    const editingAuto = autos.find(auto => auto.id === id);
+    // Ažuriramo stanje uređivanja svakog polja posebno
+    setEditParams({
+      marka: editingAuto.marka,
+      model: editingAuto.model,
+      godina_proizvodnje: editingAuto.godina_proizvodnje,
+      boja: editingAuto.boja,
+      registraciona_oznaka: editingAuto.registraciona_oznaka,
+      istek_registracije: editingAuto.istek_registracije,
+      cena_po_danu: editingAuto.cena_po_danu
+    });
+  };
+  
+  // Funkcija za završavanje uređivanja automobila
+  const handleFinishEdit = async (id) => {
+    try {
+      const token = sessionStorage.getItem('token');
+      await axios.put(`http://127.0.0.1:8000/api/auto/${id}`, editParams, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      // Nakon uspešnog ažuriranja, ažuriramo listu automobila
+      const updatedAutos = autos.map(auto => {
+        if (auto.id === id) {
+          return { ...auto, ...editParams };
+        }
+        return auto;
+      });
+      setAutos(updatedAutos);
+      setEditItemId(null); // Resetujemo ID automobila koji se uređuje
+    } catch (error) {
+      console.error('Error updating auto:', error);
+    }
+  };
+  
+  // Funkcija za odustajanje od uređivanja
+  const handleCancelEdit = () => {
+    setEditItemId(null); // Resetujemo ID automobila koji se uređuje
+  };
+  
   // Funkcija za izmenu automobila
-  const handleEdit = (id) => {
-    // Implementacija za izmenu automobila
+  const handleEditChange = e => {
+    const { name, value } = e.target;
+    setEditParams(prevParams => ({
+      ...prevParams,
+      [name]: value
+    }));
   };
 
   return (
@@ -82,18 +143,71 @@ const Automobili = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredAutos.map(auto => (
+          {autos.map(auto => (
             <tr key={auto.id}>
-              <td>{auto.marka}</td>
-              <td>{auto.model}</td>
-              <td>{auto.godina_proizvodnje}</td>
-              <td>{auto.boja}</td>
+              <td>
+                {editItemId === auto.id ? (
+                  <input
+                    type="text"
+                    name="marka"
+                    value={editParams.marka}
+                    onChange={handleEditChange}
+                  />
+                ) : (
+                  auto.marka
+                )}
+              </td>
+              <td>
+                {editItemId === auto.id ? (
+                  <input
+                    type="text"
+                    name="model"
+                    value={editParams.model}
+                    onChange={handleEditChange}
+                  />
+                ) : (
+                  auto.model
+                )}
+              </td>
+              <td>
+                {editItemId === auto.id ? (
+                  <input
+                    type="text"
+                    name="godina_proizvodnje"
+                    value={editParams.godina_proizvodnje}
+                    onChange={handleEditChange}
+                  />
+                ) : (
+                  auto.godina_proizvodnje
+                )}
+              </td>
+              <td>
+                {editItemId === auto.id ? (
+                  <input
+                    type="text"
+                    name="boja"
+                    value={editParams.boja}
+                    onChange={handleEditChange}
+                  />
+                ) : (
+                  auto.boja
+                )}
+              </td>
               <td>{auto.registraciona_oznaka}</td>
               <td>{auto.istek_registracije}</td>
               <td>{auto.cena_po_danu}</td>
               <td>
-                <button onClick={() => handleEdit(auto.id)}><RiPencilLine /></button>
-                <button onClick={() => handleDelete(auto.id)}><RiDeleteBin6Line /></button>
+                {editItemId === auto.id ? (
+                  <>
+                    <button onClick={() => handleFinishEdit(auto.id, editParams)}>Sačuvaj</button>
+                    <button onClick={handleCancelEdit}>Otkaži</button>
+                  </>
+                ) : (
+                  <>
+                    <button onClick={() => handleStartEdit(auto.id)}><RiPencilLine /></button>
+                    <button onClick={() => handleDelete(auto.id)}><RiDeleteBin6Line /></button>
+                  </>
+                )}
               </td>
             </tr>
           ))}

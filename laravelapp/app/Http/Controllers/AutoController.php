@@ -34,7 +34,7 @@ class AutoController extends Controller
             'model' => 'required',
             'godina_proizvodnje' => 'required',
             'boja' => 'required',
-            'broj_vrata' => 'required|integer',
+            'broj_vrata' => 'integer',
             'prenos' => 'required|in:automatski,manuelni',
             'registraciona_oznaka' => 'required|unique:autos',
             'istek_registracije' => 'required|date',
@@ -77,12 +77,12 @@ class AutoController extends Controller
             'model' => 'required',
             'godina_proizvodnje' => 'required',
             'boja' => 'required',
-            'broj_vrata' => 'required|integer',
-            'prenos' => 'required|in:automatski,manuelni',
+            'broj_vrata' => 'integer',
+            'prenos' => 'in:automatski,manuelni',
             'registraciona_oznaka' => 'required|unique:autos,registraciona_oznaka,'.$id,
-            'istek_registracije' => 'required|date',
-            'maksimalan_broj_putnika' => 'required|integer',
-            'cena_po_danu' => 'required|numeric',
+            'istek_registracije' => ' |date',
+            'maksimalan_broj_putnika' => ' |integer',
+            'cena_po_danu' => ' |numeric',
         ]);
 
         if ($validator->fails()) {
