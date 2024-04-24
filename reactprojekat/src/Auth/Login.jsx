@@ -23,10 +23,17 @@ const LoginForm = ({ setToken }) => {
       const response = await axios.post('http://127.0.0.1:8000/api/login', formData);
       console.log(response.data.token);  
       sessionStorage.setItem("token", response.data.token)
+      sessionStorage.setItem("uloga", response.data.user.uloga)
+
       sessionStorage.setItem("user", JSON.stringify(response.data.user));
 
       setToken(response.data.token)
-      navigate('/ponuda')
+      if(response.data.user.uloga=="admin"){
+        navigate("/automobili")
+      }else{
+        navigate('/ponuda')
+
+      }
     } catch (error) {
       console.error('Login failed:', error);  
     }

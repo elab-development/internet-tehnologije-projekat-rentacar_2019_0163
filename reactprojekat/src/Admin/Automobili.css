@@ -1,0 +1,30 @@
+/* Dodajemo stilizaciju za tablicu */
+.auto-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;  
+    margin-left: 10%;
+ 
+
+  }
+  
+  .auto-table th,
+  .auto-table td {
+    border: 1px solid #dee2e6;
+    padding: 8px;
+  }
+  
+  .auto-table th {
+    background-color: hsl(233deg 36% 38%);
+    color: #fff;
+    text-align: left;
+  }
+  
+  .auto-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+  }
+  
+  .auto-table tbody tr:hover {
+    background-color: #e9ecef;
+  }
+  
