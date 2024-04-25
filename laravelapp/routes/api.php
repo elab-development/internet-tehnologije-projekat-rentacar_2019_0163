@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AutoController;
 use App\Http\Controllers\DokumentController;
 use App\Http\Controllers\RezervacijaController;
+use App\Http\Controllers\StatistikaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/stats', [StatistikaController::class, 'getStats']);  //dodato za seminarski
     Route::get('dokumenti/{id}/download', [DokumentController::class, 'download']);
     Route::resources([
         'auto' => AutoController::class,

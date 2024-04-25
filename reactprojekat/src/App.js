@@ -9,6 +9,7 @@ import AutoList from './Auto/AutoList';
 import Footer from './Navbar/Footer';
 import Automobili from './Admin/Automobili';
 import Profile from './Profile/Profile';
+import Admin from './Admin/Admin';
 function App() {
   const [token,setToken] = useState(null);
   const [uloga,setUloga] = useState(null);
@@ -33,7 +34,9 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/automobili" element={<Automobili />} />{/*dodato */}
           <Route path="/ponuda" element={<AutoList />} />  {/*za seminarski dodat modal za rezervaciju */}
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile />} />{/*dodato */}
+          <Route path="/admin" element={<Admin />} />{/*dodato */}
+
         </Routes>
         <Footer></Footer>
       </div>

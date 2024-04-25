@@ -27,9 +27,10 @@ const Navbar = ({ token, setToken, uloga, setUloga }) => {
 
   return (
     <div className="navbar">
-      {token !== null && uloga === 'admin' ? ( // Proveravamo da li je uloga admin
+      {token !== null && uloga == 'admin' ? ( // Proveravamo da li je uloga admin
         <div className="auth-links">
-          <button onClick={() => navigate('/ponuda')}>Automobili</button> {/* Prikazujemo opciju 'Automobili' za admina */}
+           <button onClick={() => navigate('/admin')}>AdminPanel</button>
+          <button onClick={() => navigate('/automobili')}>Automobili</button> {/* Prikazujemo opciju 'Automobili' za admina */}
           <button onClick={handleLogout}>Logout</button> {/* Adminu se prikazuje opcija 'Logout' */}
         </div>
       ) : token !== null ? ( // Ako uloga nije admin, ali postoji token
