@@ -9,13 +9,13 @@ const Profile = () => {
   const [documentNumber, setDocumentNumber] = useState('');
   const [file, setFile] = useState(null);
   const [documents, setDocuments] = useState([]);
-  const token = sessionStorage.getItem('token');  
+  const token = sessionStorage.getItem('token');
 
   const fetchDocuments = async () => {
     try {
       const response = await axios.get('http://127.0.0.1:8000/api/dokumenti', {
         headers: {
-          Authorization: `Bearer ${token}`  
+          Authorization: `Bearer ${token}`
         }
       });
       setDocuments(response.data.data);
@@ -29,7 +29,7 @@ const Profile = () => {
       try {
         const response = await axios.get('http://127.0.0.1:8000/api/user', {
           headers: {
-            Authorization: `Bearer ${token}` 
+            Authorization: `Bearer ${token}`
           }
         });
         setUser(response.data);
@@ -42,7 +42,7 @@ const Profile = () => {
       try {
         const response = await axios.get('http://127.0.0.1:8000/api/rezervacije', {
           headers: {
-            Authorization: `Bearer ${token}`  
+            Authorization: `Bearer ${token}`
           }
         });
         setReservations(response.data.data);
@@ -51,12 +51,12 @@ const Profile = () => {
       }
     };
 
-    if (token) { // Provera da li postoji token pre slanja zahteva
+    if (token) {
       fetchUser();
       fetchReservations();
       fetchDocuments();
     }
-  }, [token]); // Dodavanje tokena kao zavisnosti, tako da će se useEffect ponovo pokrenuti ako se token promeni
+  }, [token]);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -72,14 +72,12 @@ const Profile = () => {
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/dokumenti', formData, {
         headers: {
-          Authorization: `Bearer ${token}`, // Postavljanje tokena u Authorization zaglavlje
-          'Content-Type': 'multipart/form-data' // Postavljanje Content-Type zaglavlja za FormData
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
         }
       });
       console.log('Document uploaded successfully:', response.data);
-      // Osveži listu dokumenata
       fetchDocuments();
-      // Resetuj formu
       setDocumentType('');
       setDocumentNumber('');
       setFile(null);
@@ -94,17 +92,29 @@ const Profile = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        responseType: 'blob', // Postavljamo responseType na 'blob' da bismo dobili binarni odgovor
+        responseType: 'blob',
       });
-      // Kreiramo objekat URL za binarni odgovor i otvaramo ga u novom prozoru
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'document.pdf'); // Postavljamo naziv fajla za preuzimanje
+      link.setAttribute('download', 'document.pdf');
       document.body.appendChild(link);
       link.click();
     } catch (error) {
       console.error('Error downloading document:', error);
+    }
+  };
+
+  const handleDelete = async (documentId) => {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/dokumenti/${documentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      fetchDocuments();
+    } catch (error) {
+      console.error('Error deleting document:', error);
     }
   };
 
@@ -182,6 +192,7 @@ const Profile = () => {
               <button onClick={() => handleDownload(document.id)}>
                 {document.document_type} - {document.document_number}
               </button>
+              <button onClick={() => handleDelete(document.id)}>Delete</button>
             </li>
           ))}
         </ul>
