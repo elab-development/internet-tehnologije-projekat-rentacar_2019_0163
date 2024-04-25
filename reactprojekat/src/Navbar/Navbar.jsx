@@ -34,6 +34,7 @@ const Navbar = ({ token, setToken, uloga, setUloga }) => {
         </div>
       ) : token !== null ? ( // Ako uloga nije admin, ali postoji token
         <div className="auth-links">
+          <button onClick={() => navigate('/profile')}>Moj profil</button> 
           <button onClick={() => navigate('/ponuda')}>Ponuda</button> {/* Prikazujemo opciju 'Ponuda' za korisnike koji nisu admini */}
           <button onClick={handleLogout}>Logout</button> {/* Prikazujemo opciju 'Logout' za korisnike koji nisu admini */}
         </div>

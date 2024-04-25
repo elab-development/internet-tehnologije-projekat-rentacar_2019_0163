@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import AutoList from './Auto/AutoList';
 import Footer from './Navbar/Footer';
 import Automobili from './Admin/Automobili';
+import Profile from './Profile/Profile';
 function App() {
   const [token,setToken] = useState(null);
   const [uloga,setUloga] = useState(null);
@@ -32,7 +33,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/automobili" element={<Automobili />} />{/*dodato */}
           <Route path="/ponuda" element={<AutoList />} />  {/*za seminarski dodat modal za rezervaciju */}
-
+          <Route path="/profile" element={<Profile />} />
         </Routes>
         <Footer></Footer>
       </div>
