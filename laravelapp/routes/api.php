@@ -29,6 +29,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('dokumenti/{id}/download', [DokumentController::class, 'download']);
     Route::resources([
         'auto' => AutoController::class,
         'rezervacije' => RezervacijaController::class,

@@ -80,4 +80,33 @@ class DokumentController extends Controller
 
         return response()->json(['message' => 'Document deleted successfully']);
     }
+
+
+    public function download($id)
+    {
+        $dokument = Dokument::findOrFail($id);
+
+        // Provera da li korisnik ima pravo da preuzme dokument
+        if (Auth::id() !== $dokument->user_id) {
+            return response()->json(['error' => 'You are not authorized to download this document.'], 403);
+        }
+
+        // Preuzimanje dokumenta iz storage-a
+        $filePath = storage_path('app/' . $dokument->file_path);
+        
+        // Provera da li fajl postoji
+        if (!Storage::exists($dokument->file_path)) {
+            return response()->json(['error' => 'File not found.'], 404);
+        }
+
+        // Vraćanje fajla kao odgovor sa odgovarajućim zaglavljima
+        return response()->download($filePath, $dokument->document_type . '_' . $dokument->document_number . '.pdf');
+    }
+
+
+
+
+
+
+
 }
