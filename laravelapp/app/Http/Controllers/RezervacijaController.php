@@ -27,10 +27,12 @@ class RezervacijaController extends Controller
         return response()->json(['data' => RezervacijaResource::collection( $rezervacije)]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request)  //malo izmenjena metoda za seminarski rad, promenjeno da ne moze da se kreira rezervacija za automobil ako je vec zauzet
     {
-        $user_id = Auth::id(); // Dobij ID trenutno ulogovanog korisnika
-
+        // Dobij ID trenutno ulogovanog korisnika
+        $user_id = Auth::id(); 
+    
+        // Validacija ulaznih podataka
         $validator = Validator::make($request->all(), [
             'automobil_id' => 'required|exists:autos,id',
             'datum_od' => 'required|date',
@@ -39,15 +41,32 @@ class RezervacijaController extends Controller
             'cena' => 'required|numeric',
             'napomena' => 'nullable|string',
         ]);
-
+    
+        // Ako validacija ne uspe, vraćamo grešku
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
-
+    
+        // Proveravamo da li postoji rezervacija za dati automobil u datom vremenskom periodu
+        $existingReservation = Rezervacija::where('automobil_id', $request->automobil_id)
+            ->where(function ($query) use ($request) {
+                $query->whereBetween('datum_od', [$request->datum_od, $request->datum_do])
+                      ->orWhereBetween('datum_do', [$request->datum_od, $request->datum_do]);
+            })
+            ->exists();
+    
+        // Ako postoji rezervacija za dati automobil u datom vremenskom periodu, vraćamo grešku
+        if ($existingReservation) {
+            return response()->json(['error' => 'Selected automobile is already reserved for the specified period.'], 400);
+        }
+    
+        // Kreiranje rezervacije
         $rezervacija = Rezervacija::create(array_merge($request->all(), ['user_id' => $user_id]));
-
-        return response()->json(['data' => new RezervacijaResource( $rezervacija)], 201);
+    
+        // Vraćamo uspješan odgovor sa podacima o kreiranoj rezervaciji
+        return response()->json(['data' => new RezervacijaResource($rezervacija)], 201);
     }
+    
 
     public function update(Request $request, $id)
     {
