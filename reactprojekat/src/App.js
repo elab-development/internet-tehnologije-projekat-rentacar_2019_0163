@@ -32,9 +32,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Login setToken={setToken}/>} />
           <Route path="/register" element={<Register />} />
-          <Route path="/automobili" element={<Automobili />} />{/*dodato */}
-          <Route path="/ponuda" element={<AutoList />} />  {/*za seminarski dodat modal za rezervaciju */}
-          <Route path="/profile" element={<Profile />} />{/*dodato */}
+          <Route path="/automobili" element={<Automobili />} />
+          <Route path="/ponuda" element={<AutoList />} /> 
+          <Route path="/profile" element={<Profile />} /> 
           <Route path="/admin" element={<Admin />} />{/*dodato */}
 
         </Routes>

@@ -66,8 +66,10 @@ const Automobili = () => {
       });
       const updatedAutos = autos.filter(auto => auto.id !== id);
       setAutos(updatedAutos);
+      alert("USPESNO OBRISANO");
     } catch (error) {
       console.error('Error deleting auto:', error);
+      alert("GRESKA PRILIKOM BRISANJA");
     }
   };
 

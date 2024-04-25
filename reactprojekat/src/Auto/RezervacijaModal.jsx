@@ -33,7 +33,7 @@ const RezervacijaModal = ({ closeModal, auto }) => {
     const startDate = new Date(datum_od);
     const endDate = new Date(datum_do);
     const timeDifference = endDate.getTime() - startDate.getTime();
-    const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+    const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));   
 
     let totalPrice = daysDifference * cena_po_danu;
 

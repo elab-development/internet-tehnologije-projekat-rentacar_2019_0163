@@ -31,7 +31,7 @@ Route::post('/register', [AuthController::class, 'register']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/stats', [StatistikaController::class, 'getStats']);  //dodato za seminarski
-    Route::get('dokumenti/{id}/download', [DokumentController::class, 'download']);
+    Route::get('dokumenti/{id}/download', [DokumentController::class, 'download']);//dodato za seminarski
     Route::resources([
         'auto' => AutoController::class,
         'rezervacije' => RezervacijaController::class,
