@@ -28,7 +28,7 @@ const LoginForm = ({ setToken }) => {
       sessionStorage.setItem("user", JSON.stringify(response.data.user));
 
       setToken(response.data.token)
-      if(response.data.user.uloga=="admin"){
+      if(response.data.user.uloga==="admin"){
         navigate("/automobili")
       }else{
         navigate('/ponuda')
@@ -36,6 +36,17 @@ const LoginForm = ({ setToken }) => {
       }
     } catch (error) {
       console.error('Login failed:', error);  
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/forgot-password', { email });
+      console.log(response.data.status);  
+      alert("PROVERITE SVOJ MAIL")
+    } catch (error) {
+      alert("GRESKA")
+      console.error('Forgot password failed:', error);  
     }
   };
 
@@ -63,8 +74,8 @@ const LoginForm = ({ setToken }) => {
         Login
       </button>
       <div className="footer-login">
-        <span>Sign up</span>
-        <span>Forgot Password?</span>
+     
+        <button onClick={handleForgotPassword}>Forgot Password?</button>
       </div>
     </form>
   );
